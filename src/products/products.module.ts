@@ -7,8 +7,12 @@ import {
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
 import { AuthMiddleware } from 'src/common/middleware/auth/auth.middleware';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Product } from './product.entity';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Product]), UsersModule],
   controllers: [ProductsController],
   providers: [ProductsService],
 })
