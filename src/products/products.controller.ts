@@ -7,34 +7,46 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UsersService } from 'src/users/users.service';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 
+@UseGuards(JwtAuthGuard)
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly usersService: UsersService,
+  ) {}
 
-  // GET /products - public
+  // GET /products
   @Get()
   findAll() {
     return this.productsService.findAll();
   }
 
-  // GET /products/:id - public
+  // GET /products/:id
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.findOne(id);
   }
 
-  // POST /products - protected
+  // POST /products - associates product with the logged-in user
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  async create(
+    @Body() dto: CreateProductDto,
+    @CurrentUser() currentUser: { id: number; email: string },
+  ) {
+    const owner = await this.usersService.findOne(currentUser.id);
+    return this.productsService.create(dto, owner);
   }
 
-  // PATCH /products/:id - protected
+  // PATCH /products/:id
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -43,7 +55,7 @@ export class ProductsController {
     return this.productsService.update(id, updateProductDto);
   }
 
-  // DELETE /products/:id - protected
+  // DELETE /products/:id
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);
