@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Product } from '../products/product.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -26,6 +27,7 @@ export class User {
   phoneNumber: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @OneToMany(() => Product, (product) => product.owner)
