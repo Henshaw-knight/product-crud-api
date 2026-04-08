@@ -1,10 +1,15 @@
+import { Type } from 'class-transformer';
 import {
+  IsArray,
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
   IsString,
-  Min,
+  ValidateNested,
 } from 'class-validator';
+import { CreatePropertyDto } from 'src/properties/create-property.dto';
 
 export class CreateProductDto {
   @IsString()
@@ -19,7 +24,25 @@ export class CreateProductDto {
   @IsPositive()
   price: number;
 
+  @IsBoolean()
+  @IsOptional()
+  inStock?: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  category: string;
+
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
+
   @IsNumber()
-  @Min(0)
-  stock: number;
+  @IsOptional()
+  rating?: number;
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => CreatePropertyDto)
+  properties?: CreatePropertyDto[];
 }
