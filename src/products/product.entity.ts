@@ -8,8 +8,8 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from '../users/user.entity';
-import { Property } from 'src/properties/property.entity';
-import { Category } from 'src/categories/category.entity';
+import { Property } from '../properties/property.entity';
+import { Category } from '../categories/category.entity';
 
 @Entity('products')
 export class Product {
