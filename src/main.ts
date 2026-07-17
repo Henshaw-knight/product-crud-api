@@ -26,7 +26,10 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: [
+      'http://localhost:4200',
+      'https://ang-product-catalog.netlify.app',
+    ],
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
