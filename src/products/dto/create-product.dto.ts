@@ -2,11 +2,14 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPositive,
   IsString,
+  Max,
+  Min,
   ValidateNested,
 } from 'class-validator';
 import { CreatePropertyDto } from 'src/properties/create-property.dto';
@@ -28,15 +31,17 @@ export class CreateProductDto {
   @IsOptional()
   inStock?: boolean;
 
-  @IsString()
+  @IsInt()
   @IsNotEmpty()
-  category: string;
+  categoryId: number; // foreign key reference to Category
 
   @IsString()
   @IsOptional()
   imageUrl?: string;
 
   @IsNumber()
+  @Min(0)
+  @Max(5)
   @IsOptional()
   rating?: number;
 

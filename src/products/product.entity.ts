@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Property } from 'src/properties/property.entity';
+import { Category } from 'src/categories/category.entity';
 
 @Entity('products')
 export class Product {
@@ -28,9 +29,6 @@ export class Product {
   inStock: boolean;
 
   @Column({ nullable: true })
-  category: string;
-
-  @Column({ nullable: true })
   imageUrl: string;
 
   @Column('decimal', { precision: 3, scale: 2, nullable: true })
@@ -41,6 +39,12 @@ export class Product {
     eager: true,
   })
   properties: Property[];
+
+  @ManyToOne(() => Category, (category) => category.products, {
+    eager: true,
+    nullable: true,
+  })
+  category: Category;
 
   @ManyToOne(() => User, (user) => user.products, { eager: false })
   owner: User;
